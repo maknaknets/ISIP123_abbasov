@@ -83,3 +83,106 @@ namespace LibraryManagement
             Console.WriteLine("0. Exit");
             Console.Write("Enter your choice: ");
         }
+        static void HandleChoice(string choice)
+        {
+            try
+            {
+                switch (choice)
+                {
+                    case "1":
+                        AddBook();
+                        break;
+                    case "2":
+                        DeleteBook();
+                        break;
+                    case "3":
+                        FindByTitle();
+                        break;
+                    case "4":
+                        FindByAuthor();
+                        break;
+                    case "5":
+                        FindByGenre();
+                        break;
+                    case "6":
+                        SortByTitle();
+                        break;
+                    case "7":
+                        SortByYear();
+                        break;
+                    case "8":
+                        ShowExtremePrices();
+                        break;
+                    case "9":
+                        GroupByAuthor();
+                        break;
+                    case "10":
+                        ListAllBooks();
+                        break;
+                    case "0":
+                        Environment.Exit(0);
+                        break;
+                    default:
+                        Console.WriteLine("Invalid choice. Please try again.");
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+        }
+        static void AddBook()
+        {
+            Console.Write("Enter Title: ");
+            string title = Console.ReadLine().Trim();
+            if (string.IsNullOrEmpty(title))
+            {
+                Console.WriteLine("Title cannot be empty.");
+                return;
+            }
+
+            Console.Write("Enter Author: ");
+            string author = Console.ReadLine().Trim();
+            if (string.IsNullOrEmpty(author))
+            {
+                Console.WriteLine("Author cannot be empty.");
+                return;
+            }
+
+            Genre genre = GetGenreFromUser();
+
+            int year = GetValidInt("Enter Year: ", 1, DateTime.Now.Year);
+
+            decimal price = GetValidDecimal("Enter Price: ", 0.01m);
+
+            Book newBook = new Book(title, author, genre, year, price);
+            books.Add(newBook);
+            Console.WriteLine("Book added successfully.");
+            Console.WriteLine(newBook);
+        }
+
+        static Genre GetGenreFromUser()
+        {
+            Console.WriteLine("Select Genre:");
+            var genres = Enum.GetValues(typeof(Genre));
+            for (int i = 0; i < genres.Length; i++)
+            {
+                Console.WriteLine($"{i + 1}. {genres.GetValue(i)}");
+            }
+            int selection = GetValidInt("Enter number: ", 1, genres.Length);
+            return (Genre)genres.GetValue(selection - 1);
+        }
+
+        static int GetValidInt(string prompt, int min, int max = int.MaxValue)
+        {
+            while (true)
+            {
+                Console.Write(prompt);
+                if (int.TryParse(Console.ReadLine(), out int value) && value >= min && value <= max)
+                {
+                    return value;
+                }
+                Console.WriteLine($"Invalid input. Must be integer between {min} and {max}.");
+            }
+        }
