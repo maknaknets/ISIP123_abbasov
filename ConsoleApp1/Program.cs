@@ -88,4 +88,69 @@ class Program
             }
             return count;
         }
+// Подсчёт кол-ва гласных букв
+        private static int CountVowels(string text)
+        {
+            string vowels = "aeiouyAEIOUY";                   // Гласные буквы англ алфавита
+            int count = 0;
+            foreach (char ch in text)
+            {
+                if (vowels.Contains(ch))
+                    count++;
+            }
+            return count;
+        }
 
+        // Подсчёт кол-ва согласных букв
+        private static int CountConsonants(string text)
+        {
+            string consonants = "bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ";
+            int count = 0;
+            foreach (char ch in text)
+            {
+                if (consonants.Contains(ch))
+                    count++;
+            }
+            return count;
+        }
+
+        // Поиск самого длинного слова
+        private static string FindLongestWord(string[] words)
+        {
+            string longest = words[0];
+            for (int i = 1; i < words.Length; i++)
+            {
+                if (words[i].Length > longest.Length)
+                    longest = words[i];
+            }
+            return longest;
+        }
+
+        // Статистика частотности букв
+        private static Dictionary<char, int> CalculateLetterFrequency(string text)
+        {
+            Dictionary<char, int> frequencyDict = new Dictionary<char, int>();
+            foreach (char ch in text.ToCharArray())
+            {
+                if (!frequencyDict.ContainsKey(ch))
+                    frequencyDict[ch] = 0;
+                frequencyDict[ch]++;
+            }
+            return frequencyDict;
+        }
+        // Отображение статистики 
+        private static void DisplayStats(TextStatistics stats)
+        {
+            Console.WriteLine($"Количество слов: {stats.WordCount}");
+            Console.WriteLine($"Самое короткое слово: '{stats.ShortestWord}'");
+            Console.WriteLine($"Количество предложений: {stats.SentenceCount}");
+            Console.WriteLine($"Количество гласных букв: {stats.VowelsCount}");
+            Console.WriteLine($"Количество согласных букв: {stats.ConsonantsCount}");
+            Console.WriteLine($"Самое длинное слово: '{stats.LongestWord}'");
+            Console.WriteLine("Частота встречаемости каждой буквы:");
+            foreach (var pair in stats.LetterFrequency)
+            {
+                Console.WriteLine($"{pair.Key}: {pair.Value}");
+            }
+        }
+      }
