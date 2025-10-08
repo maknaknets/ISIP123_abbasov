@@ -35,3 +35,25 @@ namespace LibraryManagement
             Year = year;
             Price = price;
         }
+        public override string ToString()
+        {
+            return $"ID: {Id}, Title: {Title}, Author: {Author}, Genre: {Genre}, Year: {Year}, Price: {Price:C}";
+        }
+    }
+
+    class Program
+    {
+        static List<Book> books = new List<Book>();
+
+        static void Main(string[] args)
+        {
+            // Initialize with 5 test books
+            InitializeTestData();
+
+            while (true)
+            {
+                DisplayMenu();
+                string choice = Console.ReadLine();
+                HandleChoice(choice);
+            }
+        }
