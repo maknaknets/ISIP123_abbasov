@@ -57,3 +57,29 @@ namespace LibraryManagement
                 HandleChoice(choice);
             }
         }
+        static void InitializeTestData()
+        {
+            books.Add(new Book("The Great Gatsby", "F. Scott Fitzgerald", Genre.Fiction, 1925, 10.99m));
+            books.Add(new Book("1984", "George Orwell", Genre.ScienceFiction, 1949, 8.99m));
+            books.Add(new Book("To Kill a Mockingbird", "Harper Lee", Genre.Fiction, 1960, 12.50m));
+            books.Add(new Book("Sapiens", "Yuval Noah Harari", Genre.NonFiction, 2011, 15.00m));
+            books.Add(new Book("The Da Vinci Code", "Dan Brown", Genre.Mystery, 2003, 9.99m));
+            Console.WriteLine("Test data initialized with 5 books.");
+        }
+
+        static void DisplayMenu()
+        {
+            Console.WriteLine("\nLibrary Management System");
+            Console.WriteLine("1. Add Book");
+            Console.WriteLine("2. Delete Book by ID");
+            Console.WriteLine("3. Find Books by Title");
+            Console.WriteLine("4. Find Books by Author");
+            Console.WriteLine("5. Find Books by Genre");
+            Console.WriteLine("6. Sort Books by Title");
+            Console.WriteLine("7. Sort Books by Year");
+            Console.WriteLine("8. Show Most Expensive and Cheapest Book");
+            Console.WriteLine("9. Group Books by Author and Show Counts");
+            Console.WriteLine("10. List All Books");
+            Console.WriteLine("0. Exit");
+            Console.Write("Enter your choice: ");
+        }
