@@ -59,5 +59,33 @@ class Program
             return text.Split(separators, StringSplitOptions.RemoveEmptyEntries);
         }
 
-    }
-}
+// Подсчёт общего кол-ва слов
+        private static int CountWords(string[] words)
+        {
+            return words.Length;
+        }
+
+        // Поиск самого короткого слова среди списка слов
+        private static string FindShortestWord(string[] words)
+        {
+            string shortest = words[0];
+            for (int i = 1; i < words.Length; i++)
+            {
+                if (words[i].Length < shortest.Length)
+                    shortest = words[i];
+            }
+            return shortest;
+        }
+        // Подсчёт количества предложений в тексте
+        private static int CountSentences(string text)
+        {
+            char[] endMarks = { '.', '!', '?' };              // Знаки конца предложения
+            int count = 0;
+            foreach (char ch in text)
+            {
+                if (Array.IndexOf(endMarks, ch) >= 0)
+                    count++;
+            }
+            return count;
+        }
+
