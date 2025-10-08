@@ -186,3 +186,118 @@ namespace LibraryManagement
                 Console.WriteLine($"Invalid input. Must be integer between {min} and {max}.");
             }
         }
+
+        static decimal GetValidDecimal(string prompt, decimal min)
+        {
+            while (true)
+            {
+                Console.Write(prompt);
+                if (decimal.TryParse(Console.ReadLine(), out decimal value) && value >= min)
+                {
+                    return value;
+                }
+                Console.WriteLine($"Invalid input. Must be decimal >= {min}.");
+            }
+        }
+
+        static void DeleteBook()
+        {
+            int id = GetValidInt("Enter ID to delete: ", 1);
+            var bookToRemove = books.FirstOrDefault(b => b.Id == id);
+            if (bookToRemove != null)
+            {
+                books.Remove(bookToRemove);
+                Console.WriteLine("Book deleted successfully.");
+            }
+            else
+            {
+                Console.WriteLine("Book not found.");
+            }
+        }
+
+        static void FindByTitle()
+        {
+            Console.Write("Enter Title to search: ");
+            string search = Console.ReadLine().Trim().ToLower();
+            var results = books.Where(b => b.Title.ToLower().Contains(search)).ToList();
+            DisplayBooks(results);
+        }
+
+        static void FindByAuthor()
+        {
+            Console.Write("Enter Author to search: ");
+            string search = Console.ReadLine().Trim().ToLower();
+            var results = books.Where(b => b.Author.ToLower().Contains(search)).ToList();
+            DisplayBooks(results);
+        }
+
+        static void FindByGenre()
+        {
+            Genre genre = GetGenreFromUser();
+            var results = books.Where(b => b.Genre == genre).ToList();
+            DisplayBooks(results);
+        }
+
+        static void SortByTitle()
+        {
+            var sorted = books.OrderBy(b => b.Title).ToList();
+            DisplayBooks(sorted);
+        }
+
+        static void SortByYear()
+        {
+            var sorted = books.OrderBy(b => b.Year).ToList();
+            DisplayBooks(sorted);
+        }
+
+        static void ShowExtremePrices()
+        {
+            if (books.Any())
+            {
+                var maxPriceBook = books.OrderByDescending(b => b.Price).First();
+                var minPriceBook = books.OrderBy(b => b.Price).First();
+                Console.WriteLine("Most Expensive Book:");
+                Console.WriteLine(maxPriceBook);
+                Console.WriteLine("Cheapest Book:");
+                Console.WriteLine(minPriceBook);
+            }
+            else
+            {
+                Console.WriteLine("No books available.");
+            }
+        }
+
+        static void GroupByAuthor()
+        {
+            var groups = books.GroupBy(b => b.Author)
+                              .Select(g => new { Author = g.Key, Count = g.Count() })
+                              .OrderBy(g => g.Author);
+
+            Console.WriteLine("Books grouped by Author:");
+            foreach (var group in groups)
+            {
+                Console.WriteLine($"{group.Author}: {group.Count} books");
+            }
+        }
+
+        static void ListAllBooks()
+        {
+            DisplayBooks(books);
+        }
+
+        static void DisplayBooks(List<Book> bookList)
+        {
+            if (bookList.Any())
+            {
+                foreach (var book in bookList)
+                {
+                    Console.WriteLine(book);
+                }
+            }
+            else
+            {
+                Console.WriteLine("No books found.");
+            }
+        }
+    }
+}
