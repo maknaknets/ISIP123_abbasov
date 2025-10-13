@@ -28,3 +28,27 @@ public abstract class Person
     // Абстрактный метод для полиморфизма
     public abstract string GetDetails();
 }
+// Класс Student наследуется от Person
+public class Student : Person
+{
+    private List<Course> enrolledCourses;
+
+    public Student(string id, string name, int age, string contactInfo)
+        : base(id, name, age, contactInfo)
+    {
+        enrolledCourses = new List<Course>();
+    }
+
+    public void EnrollCourse(Course course)
+    {
+        if (!enrolledCourses.Contains(course))
+            enrolledCourses.Add(course);
+    }
+
+    public IReadOnlyList<Course> EnrolledCourses => enrolledCourses.AsReadOnly();
+
+    public override string GetDetails()
+    {
+        return $"Student: {Name}, ID: {Id}, Age: {Age}, Contact: {ContactInfo}, Courses: {enrolledCourses.Count}";
+    }
+}
