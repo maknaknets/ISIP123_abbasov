@@ -159,3 +159,188 @@ public class UniversitySystem
     public void PrintAllTeachers() => teachers.ForEach(t => Console.WriteLine(t.GetDetails()));
     public void PrintAllCourses() => courses.ForEach(c => Console.WriteLine(c.GetDetails()));
 }
+// Консольное меню
+public class Program
+{
+    private static UniversitySystem university = new UniversitySystem();
+
+    public static void Main(string[] args)
+    {
+        while (true)
+        {
+            Console.WriteLine("\n=== University Management System ===");
+            Console.WriteLine("1. Add Student");
+            Console.WriteLine("2. Add Teacher");
+            Console.WriteLine("3. Add Course");
+            Console.WriteLine("4. Enroll Student to Course");
+            Console.WriteLine("5. Assign Teacher to Course");
+            Console.WriteLine("6. View Student Details");
+            Console.WriteLine("7. View Course Details");
+            Console.WriteLine("8. List All Students");
+            Console.WriteLine("9. List All Teachers");
+            Console.WriteLine("10. List All Courses");
+            Console.WriteLine("0. Exit");
+            Console.Write("Select an option: ");
+
+            string choice = Console.ReadLine();
+            Console.Clear();
+
+            switch (choice)
+            {
+                case "1":
+                    AddStudent();
+                    break;
+                case "2":
+                    AddTeacher();
+                    break;
+                case "3":
+                    AddCourse();
+                    break;
+                case "4":
+                    EnrollStudentToCourse();
+                    break;
+                case "5":
+                    AssignTeacherToCourse();
+                    break;
+                case "6":
+                    ViewStudentDetails();
+                    break;
+                case "7":
+                    ViewCourseDetails();
+                    break;
+                case "8":
+                    university.PrintAllStudents();
+                    break;
+                case "9":
+                    university.PrintAllTeachers();
+                    break;
+                case "10":
+                    university.PrintAllCourses();
+                    break;
+                case "0":
+                    return;
+                default:
+                    Console.WriteLine("Invalid option!");
+                    break;
+            }
+        }
+    }
+
+    private static void AddStudent()
+    {
+        Console.Write("Enter Student ID: ");
+        string id = Console.ReadLine();
+        Console.Write("Enter Name: ");
+        string name = Console.ReadLine();
+        Console.Write("Enter Age: ");
+        int age = int.Parse(Console.ReadLine());
+        Console.Write("Enter Contact Info: ");
+        string contactInfo = Console.ReadLine();
+        university.AddStudent(id, name, age, contactInfo);
+        Console.WriteLine("Student added successfully!");
+    }
+
+    private static void AddTeacher()
+    {
+        Console.Write("Enter Teacher ID: ");
+        string id = Console.ReadLine();
+        Console.Write("Enter Name: ");
+        string name = Console.ReadLine();
+        Console.Write("Enter Age: ");
+        int age = int.Parse(Console.ReadLine());
+        Console.Write("Enter Contact Info: ");
+        string contactInfo = Console.ReadLine();
+        university.AddTeacher(id, name, age, contactInfo);
+        Console.WriteLine("Teacher added successfully!");
+    }
+
+    private static void AddCourse()
+    {
+        Console.Write("Enter Course ID: ");
+        string courseId = Console.ReadLine();
+        Console.Write("Enter Course Title: ");
+        string title = Console.ReadLine();
+        university.AddCourse(courseId, title);
+        Console.WriteLine("Course added successfully!");
+    }
+
+    private static void EnrollStudentToCourse()
+    {
+        Console.Write("Enter Student ID: ");
+        string studentId = Console.ReadLine();
+        Console.Write("Enter Course ID: ");
+        string courseId = Console.ReadLine();
+
+        Student student = university.FindStudent(studentId);
+        Course course = university.FindCourse(courseId);
+
+        if (student != null && course != null)
+        {
+            course.EnrollStudent(student);
+            Console.WriteLine("Student enrolled successfully!");
+        }
+        else
+        {
+            Console.WriteLine("Student or Course not found!");
+        }
+    }
+
+    private static void AssignTeacherToCourse()
+    {
+        Console.Write("Enter Teacher ID: ");
+        string teacherId = Console.ReadLine();
+        Console.Write("Enter Course ID: ");
+        string courseId = Console.ReadLine();
+
+        Teacher teacher = university.FindTeacher(teacherId);
+        Course course = university.FindCourse(courseId);
+
+        if (teacher != null && course != null)
+        {
+            course.Teacher = teacher;
+            Console.WriteLine("Teacher assigned successfully!");
+        }
+        else
+        {
+            Console.WriteLine("Teacher or Course not found!");
+        }
+    }
+
+    private static void ViewStudentDetails()
+    {
+        Console.Write("Enter Student ID: ");
+        string studentId = Console.ReadLine();
+        Student student = university.FindStudent(studentId);
+
+        if (student != null)
+        {
+            Console.WriteLine(student.GetDetails());
+            Console.WriteLine("Enrolled Courses:");
+            foreach (var course in student.EnrolledCourses)
+                Console.WriteLine($"- {course.Title} (ID: {course.CourseId})");
+        }
+        else
+        {
+            Console.WriteLine("Student not found!");
+        }
+    }
+
+    private static void ViewCourseDetails()
+    {
+        Console.Write("Enter Course ID: ");
+        string courseId = Console.ReadLine();
+        Course course = university.FindCourse(courseId);
+
+        if (course != null)
+        {
+            Console.WriteLine(course.GetDetails());
+            Console.WriteLine("Enrolled Students:");
+            foreach (var student in course.EnrolledStudents)
+                Console.WriteLine($"- {student.Name} (ID: {student.Id})");
+        }
+        else
+        {
+            Console.WriteLine("Course not found!");
+        }
+    }
+}
