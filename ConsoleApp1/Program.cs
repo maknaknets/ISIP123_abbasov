@@ -136,3 +136,74 @@ class Program
                 break;
         }
     }
+    // Бой
+    static bool Fight(Player player, Enemy enemy)
+    {
+        Console.WriteLine($"\nБой с {enemy.Name}! (HP: {enemy.HP}, Атака: {enemy.Attack}, Защита: {enemy.Defense})");
+
+        while (enemy.HP > 0 && player.HP > 0)
+        {
+            if (player.IsFrozen)
+            {
+                Console.WriteLine("Игрок заморожен и пропускает ход!");
+                player.IsFrozen = false;
+            }
+            else
+            {
+                Console.Write("\nВаш ход (атака/защита): ");
+                string action = Console.ReadLine().ToLower();
+                bool isDefending = action == "защита";
+
+                // Ход игрока
+                if (action == "атака")
+                {
+                    int damage = Math.Max(0, player.Weapon.Value - enemy.Defense);
+                    enemy.HP -= damage;
+                    Console.WriteLine($"Вы нанесли {damage} урона. HP врага: {enemy.HP}");
+                }
+
+                // Проверка на уклонение (40% шанс при защите)
+                bool dodged = isDefending && random.NextDouble() < 0.4;
+                if (dodged)
+                {
+                    Console.WriteLine("Вы уклонились от атаки врага!");
+                    continue;
+                }
+            }
+
+            // Ход врага
+            if (enemy.HP > 0)
+            {
+                int damage = enemy.Attack;
+                if (enemy.CritChance > 0 && random.NextDouble() < enemy.CritChance)
+                {
+                    damage *= 2;
+                    Console.WriteLine($"{enemy.Name} нанёс критический урон!");
+                }
+
+                if (!enemy.IgnoreDefense && !player.IsFrozen)
+                {
+                    int block = random.Next((int)(player.Armor.Value * 0.7), player.Armor.Value + 1);
+                    damage = Math.Max(0, damage - block);
+                }
+
+                player.HP -= damage;
+                Console.WriteLine($"{enemy.Name} нанёс {damage} урона. Ваше HP: {player.HP}");
+
+                if (enemy.FreezeChance > 0 && random.NextDouble() < enemy.FreezeChance)
+                {
+                    player.IsFrozen = true;
+                    Console.WriteLine($"{enemy.Name} заморозил вас! Пропустите следующий ход.");
+                }
+            }
+        }
+
+        if (player.HP <= 0)
+        {
+            Console.WriteLine("Вы погибли! Игра окончена.");
+            return false;
+        }
+
+        Console.WriteLine($"{enemy.Name} повержен!");
+        return true;
+    }
