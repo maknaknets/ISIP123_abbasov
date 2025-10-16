@@ -44,3 +44,95 @@ class Program
             Console.WriteLine("Игрок полностью исцелён!");
         }
     }
+
+    // Класс предмета
+    class Item
+    {
+        public string Name { get; }
+        public int Value { get; }
+
+        public Item(string name, int value)
+        {
+            Name = name;
+            Value = value;
+        }
+    }
+
+    // Класс врага
+    class Enemy
+    {
+        public string Name { get; }
+        public int HP { get; set; }
+        public int Attack { get; }
+        public int Defense { get; }
+        public double CritChance { get; }
+        public double FreezeChance { get; }
+        public bool IgnoreDefense { get; }
+
+        public Enemy(string name, int hp, int attack, int defense, double critChance = 0, double freezeChance = 0, bool ignoreDefense = false)
+        {
+            Name = name;
+            HP = hp;
+            Attack = attack;
+            Defense = defense;
+            CritChance = critChance;
+            FreezeChance = freezeChance;
+            IgnoreDefense = ignoreDefense;
+        }
+    }
+    // Создание врага
+    static Enemy CreateEnemy()
+    {
+        int type = random.Next(3);
+        switch (type)
+        {
+            case 0: // Гоблин
+                return new Enemy("Гоблин", 30, 15, 5, critChance: 0.2);
+            case 1: // Скелет
+                return new Enemy("Скелет", 40, 12, 8, ignoreDefense: true);
+            case 2: // Маг
+                return new Enemy("Маг", 25, 10, 3, freezeChance: 0.15);
+            default:
+                return new Enemy("Гоблин", 30, 15, 5, critChance: 0.2);
+        }
+    }
+
+    // Создание босса
+    static Enemy CreateBoss(int turn)
+    {
+        int type = random.Next(4);
+        switch (type)
+        {
+            case 0: // ВВГ (Гоблин)
+                return new Enemy("ВВГ", (int)(30 * 2.0), (int)(15 * 1.5), (int)(5 * 1.2), critChance: 0.3);
+            case 1: // Ковальский (Скелет)
+                return new Enemy("Ковальский", (int)(40 * 2.5), (int)(12 * 1.3), (int)(8 * 1.4), ignoreDefense: true);
+            case 2: // Архимаг C++
+                return new Enemy("Архимаг C++", (int)(25 * 1.8), (int)(10 * 1.6), (int)(3 * 1.1), freezeChance: 0.25);
+            case 3: // Пестов С--
+                return new Enemy("Пестов С--", (int)(40 * 1.3), (int)(12 * 1.8), (int)(8 * 0.6), freezeChance: 0.3, ignoreDefense: true);
+            default:
+                return new Enemy("ВВГ", (int)(30 * 2.0), (int)(15 * 1.5), (int)(5 * 1.2), critChance: 0.3);
+        }
+    }
+
+    // Создание предмета из сундука
+    static void OpenChest(Player player)
+    {
+        int type = random.Next(3);
+        switch (type)
+        {
+            case 0: // Зелье
+                Console.WriteLine("Найдено лечебное зелье!");
+                player.Heal();
+                break;
+            case 1: // Оружие
+                Item newWeapon = new Item($"Меч +{random.Next(5, 16)}", random.Next(5, 16));
+                player.EquipWeapon(newWeapon);
+                break;
+            case 2: // Доспехи
+                Item newArmor = new Item($"Доспехи +{random.Next(3, 11)}", random.Next(3, 11));
+                player.EquipArmor(newArmor);
+                break;
+        }
+    }
