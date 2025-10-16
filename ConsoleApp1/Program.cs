@@ -207,3 +207,44 @@ class Program
         Console.WriteLine($"{enemy.Name} повержен!");
         return true;
     }
+
+    // Основной игровой цикл
+    static void Main()
+    {
+        Player player = new Player();
+        int turn = 0;
+
+        Console.WriteLine("Добро пожаловать в рогалик!");
+
+        while (player.HP > 0)
+        {
+            turn++;
+            Console.WriteLine($"\nХод {turn}. Ваше HP: {player.HP}");
+            Console.WriteLine($"Оружие: {player.Weapon.Name} (атака: {player.Weapon.Value})");
+            Console.WriteLine($"Доспехи: {player.Armor.Name} (защита: {player.Armor.Value})");
+
+            if (turn % 10 == 0)
+            {
+                // Босс каждые 10 ходов
+                Enemy boss = CreateBoss(turn);
+                if (!Fight(player, boss))
+                    break;
+            }
+            else
+            {
+                // Случайное событие: враг или сундук
+                if (random.NextDouble() < 0.5)
+                {
+                    Enemy enemy = CreateEnemy();
+                    if (!Fight(player, enemy))
+                        break;
+                }
+                else
+                {
+                    Console.WriteLine("\nВы нашли сундук!");
+                    OpenChest(player);
+                }
+            }
+        }
+    }
+}
