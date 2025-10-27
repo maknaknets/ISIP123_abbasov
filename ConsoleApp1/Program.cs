@@ -123,3 +123,70 @@ namespace AutoServiceGame
         public void UpdateDeliveryStatus() { }
         public bool IsDelivered() { }
     }
+
+    // Класс склада
+    public class Warehouse
+    {
+        public List<WarehousePart> Parts { get; set; }
+        public List<SupplyOrder> SupplyOrders { get; set; }
+
+        public Warehouse()
+        {
+            Parts = new List<WarehousePart>();
+            SupplyOrders = new List<SupplyOrder>();
+        }
+
+        public void AddPart(PartType type, int quantity) { }
+        public void RemovePart(PartType type) { }
+        public bool HasPart(PartType type) { }
+        public void CreateSupplyOrder(PartType type, int quantity) { }
+        public void UpdateSupplyOrders() { }
+        public IEnumerable<WarehousePart> GetAvailableParts() { }
+    }
+
+    // Класс автосервиса
+    public class AutoService
+    {
+        public int AutoServiceId { get; set; }
+        public decimal Balance { get; set; }
+        public Warehouse Warehouse { get; set; }
+        public List<RepairOrder> RepairOrders { get; set; }
+
+        public AutoService()
+        {
+            if (Balance < 0)
+                throw new ArgumentException("Balance cannot be negative.");
+            Warehouse = new Warehouse();
+            RepairOrders = new List<RepairOrder>();
+        }
+
+        public void AcceptClient(Client client, Car car) { }
+        public void ProcessRepair(RepairOrder order) { }
+        public void DeclineRepair(RepairOrder order) { }
+        public void PurchaseParts(PartType type, int quantity) { }
+        public void UpdateBalance(decimal amount) { }
+        public void DisplayStatus() { }
+        public void DisplayAvailableParts() { }
+    }
+
+    // Контекст базы данных
+    public class AutoServiceContext : DbContext
+    {
+        public DbSet<Client> Clients { get; set; }
+        public DbSet<Car> Cars { get; set; }
+        public DbSet<Part> Parts { get; set; }
+        public DbSet<WarehousePart> WarehouseParts { get; set; }
+        public DbSet<SupplyOrder> SupplyOrders { get; set; }
+        public DbSet<RepairOrder> RepairOrders { get; set; }
+        public DbSet<AutoService> AutoServices { get; set; }
+
+        public AutoServiceContext(DbContextOptions<AutoServiceContext> options)
+            : base(options)
+        {
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+        }
+    }
+}
